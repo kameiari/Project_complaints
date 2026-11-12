@@ -1,52 +1,50 @@
-# Complaint Topics — Consumer Complaints NLP Analysis
+## Project Structure
 
-Portfolio project for *Project: Data Analysis* (CSEBDSEDA02).
+    Project_complaints/
+    ├── data/                        # Raw CFPB dataset (git-ignored)
+    ├── notebooks/
+    │   ├── 01_setup_and_eda.ipynb                 # Corpus audit, length compression & n-gram EDA
+    │   └── 02_topic_modeling_comparison.ipynb     # Prevalence charts & product alignment heatmap
+    ├── results/
+    │   ├── eda_length_distribution.png            # Raw vs. lemmatized token distribution
+    │   ├── eda_top_products.png                   # Top 10 CFPB product categories
+    │   ├── eda_top_ngrams.png                     # Top 15 unigrams & bigrams
+    │   ├── topic_prevalence_comparison.png        # NMF vs. BERTopic topic share comparison
+    │   ├── nmf_product_alignment_heatmap.png      # NMF topics vs. ground-truth products (NMI = 0.315)
+    │   ├── topic_comparison_summary.csv           # Extracted top words & shares for all 20 topics
+    │   └── model_metrics.csv                      # Quantitative NPMI coherence benchmark
+    ├── src/
+    │   ├── preprocess.py                          # Text cleaning, redaction removal & spaCy lemmatization
+    │   └── topics.py                              # TF-IDF + NMF, BERTopic & pure-NumPy NPMI evaluation
+    ├── requirements.txt
+    └── README.md
 
-## What this project does
-This project implements an end-to-end Natural Language Processing (NLP) pipeline to analyze unstructured citizen and customer complaint narratives from the Consumer Financial Protection Bureau (CFPB) dataset ($N=25,000$ sampled narratives). Using modular Python scripts, it applies regex and spaCy preprocessing to strip redaction tokens (`XXXX`) and noise, followed by a comparative topic extraction approach using sparse features (TF-IDF + NMF) versus dense semantic features (Sentence-BERT + BERTopic) to provide institutional decision-makers with actionable topic prevalence insights.
+---
 
-## Installation
-```bash
-git clone https://github.com/kameiari/Project_complaints.git
-cd Project_complaints
-python -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-python -m ipykernel install --user --name=topics
-```
-## Data
+## Visualizations
 
-See `data/README.md` — raw data is not committed per `.gitignore` rules.
-The project uses the *US Consumer Finance Complaints* dataset (CFPB / Kaggle, CC0 Public Domain).
-`data/sample_complaints.csv` is included for lightweight testing.
+### 1. Corpus Exploration & Preprocessing Impact
+![Length Distribution](results/eda_length_distribution.png)
+![Top N-grams](results/eda_top_ngrams.png)
 
-## Usage
+### 2. Model Comparison & Ground-Truth Alignment
+![Topic Prevalence](results/topic_prevalence_comparison.png)
+![Product Alignment Heatmap](results/nmf_product_alignment_heatmap.png)
 
-```bash
-jupyter lab                       # open notebooks/01_setup_and_eda.ipynb
-python src/preprocess.py          # runs data cleaning and saves to results/
+---
 
-```
+## Reproducibility
 
-Later: `python run.py` runs the whole pipeline and writes to `results/`.
+    # 1. Create and activate virtual environment
+    python -m venv .venv
+    .\.venv\Scripts\Activate.ps1
 
-## Project structure
+    # 2. Install dependencies & spaCy English model
+    pip install -r requirements.txt
+    python -m spacy download en_core_web_sm
 
-```
-├── README.md
-├── requirements.txt
-├── .gitignore
-├── data/            raw data (ignored by git) + data/README.md
-├── notebooks/       01_setup_and_eda.ipynb
-├── src/             reusable modules (preprocess.py, vectorize.py, topics.py)
-└── results/         outputs: complaints_clean.csv, tables, figures
+    # 3. Run preprocessing (generates results/complaints_clean.csv)
+    python src/preprocess.py
 
-```
-
-## Methods & results
-
-*Filled in during Phase 2.*
-
-## Reflection / known issues
-
-*Log technical decisions, coherence score observations, and preprocessing choices here to feed the Phase-3 final abstract.*
+    # 4. Run comparative topic modeling & coherence scoring
+    python src/topics.py
