@@ -1,3 +1,5 @@
-model,n_docs,n_topics,npmi_coherence
-TF-IDF + NMF,25000,10,0.2317
-BERTopic,25000,10,0.1395
+model,n_topics,npmi_coherence,product_nmi,outlier_pct
+BOW + NMF,10,0.1722,0.2724,0.0
+BOW + LDA,10,0.1808,0.34,0.0
+TFIDF + NMF,10,0.2017,0.3146,0.0
+TFIDF + LDA,10,0.2003,0.3238,0.0
