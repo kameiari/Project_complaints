@@ -19,3 +19,5 @@ kaggle.json
 .DS_Store
 Thumbs.db
 .vscode/
+
+results/*.csv
